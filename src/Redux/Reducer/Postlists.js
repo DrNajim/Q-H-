@@ -9,8 +9,7 @@ export const getList=createAsyncThunk("PostLists/getList", async ()=>{
 })  
 export const update=createAsyncThunk("PostLists/update", async (newtet)=>{
     return axios.put(`https://dummyjson.com/posts/${newtet.id}`,{ body: newtet.body})
-    .then(res=>{console.log(res.data)
-        return res.data}) 
+    .then(res=>{ return res.data }) 
     .catch(err=>console.log(err))
 })  
 const PostlistsSlice = createSlice({

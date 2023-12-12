@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import PostList from './PostList'
 import { useState } from 'react'
 import { getList } from '../Redux/Reducer/Postlists';
+import Chatbox from './Chatbox';
 function Post(){
   const [selector, setItemList] = useState(['no data']);
   const dispatch= useDispatch();
@@ -20,6 +21,7 @@ function Post(){
   }, [dispatch]);
   return (
     <div>
+      <Chatbox/>
 <div style={{textAlign:"center", display: "flex", justifyContent:"space-evenly" }}>
         <div className="search-videoflag"></div>
       </div>
