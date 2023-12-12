@@ -9,8 +9,8 @@ function PostList(props){
     <MDBTableHead light>
       <tr>
         <th scope='col'>ID</th>
-        <th scope='col'>Title</th>
-        <th scope='col'>Body</th>
+        <th scope='col'>Email</th>
+        <th scope='col'>Name</th>
       </tr>
     </MDBTableHead>
     <MDBTableBody data-aos="flip-left"
