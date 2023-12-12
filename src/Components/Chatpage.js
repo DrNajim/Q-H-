@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   MDBContainer,
   MDBRow,
@@ -11,8 +11,58 @@ import {
   MDBTextArea,
   MDBCardHeader,
 } from "mdb-react-ui-kit";
+import { useNavigate } from "react-router-dom";
 
-  function Chatpage() {
+  function Chatpage( {socket}) {
+
+    const navigate = useNavigate();
+
+  const handleLeaveChat = () => {
+    localStorage.removeItem('userName');
+    navigate('/');
+    window.location.reload();
+  };
+  const [message, setMessage] = useState('');
+
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    socket.on('newUserResponse', (data) => setUsers(data));
+  }, [socket, users]);
+
+  const handleSendMessage = (e) => {
+    if (message.trim() && localStorage.getItem('userName')) {
+        socket.emit('message', {
+          text: message,
+          name: localStorage.getItem('userName'),
+          id: `${socket.id}${Math.random()}`,
+          socketID: socket.id,
+        });
+      }
+      setMessage('');
+    };
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    socket.on('messageResponse', (data) => setMessages([...messages, data]));
+  }, [socket, messages]);
+  const [currentTime, setCurrentTime] = useState('');
+
+  const handleButtonClick = () => {
+    // Get the current time using the Date object
+    const now = new Date();
+    
+    // Format the time (adjust this part based on your formatting needs)
+    const formattedTime = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+
+    // Update the state with the current time
+    setCurrentTime(formattedTime);
+  };
+  const lastMessageRef = useRef(null);
+  useEffect(() => {
+    lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
     <MDBContainer fluid className="py-5" style={{ backgroundColor: "#eee" }}>
       <MDBRow>
@@ -24,7 +74,7 @@ import {
           <MDBCard>
             <MDBCardBody>
               <MDBTypography listUnStyled className="mb-0">
-                <li
+                {users.map((user)=> ( <li
                   className="p-2 border-bottom"
                   style={{ backgroundColor: "#eee" }}
                 >
@@ -37,61 +87,57 @@ import {
                         width="60"
                       />
                       <div className="pt-1">
-                        <p className="fw-bold mb-0">John Doe</p>
+                        <p className="fw-bold mb-0" key={user.socketID}>{user.userName} </p>
                         <p className="small text-muted">
-                          Hello, Are you there?
+                          Chat With ME ::
                         </p>
                       </div>
                     </div>
-                    <div className="pt-1">
-                      <p className="small text-muted mb-1">Just now</p>
-                      <span className="badge bg-danger float-end">1</span>
-                    </div>
                   </a>
-                </li>
-                <li className="p-2">
-                  <a href="#!" className="d-flex justify-content-between">
-                    <div className="d-flex flex-row">
-                      <img
-                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
-                        alt="avatar"
-                        className="rounded-circle d-flex align-self-center me-3 shadow-1-strong"
-                        width="60"
-                      />
-                      <div className="pt-1">
-                        <p className="fw-bold mb-0">Brad Pitt</p>
-                        <p className="small text-muted">
-                          Lorem ipsum dolor sit.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="pt-1">
-                      <p className="small text-muted mb-1">5 mins ago</p>
-                      <span className="text-muted float-end">
-                        <MDBIcon fas icon="check" />
-                      </span>
-                    </div>
-                  </a>
-                </li>
+                </li>)
+                )}
               </MDBTypography>
             </MDBCardBody>
           </MDBCard>
         </MDBCol>
-
         <MDBCol md="6" lg="7" xl="8">
+        <header style={{display:'flex', justifyContent: 'space-evenly', margin:'.7rem', borderRadius:'50px'}}>
+        <p>Hangout with Colleagues</p>
+        <MDBBtn className='me-1' color='danger' onClick={handleLeaveChat}>
+        LEAVE CHAT
+      </MDBBtn>
+      </header>
           <MDBTypography listUnStyled>
-            <li class="d-flex justify-content-between mb-4">
+            
+            <li className="d-flex justify-content-between mb-4">
+              {messages.map((message)=>
+                message.name===localStorage.getItem('userName') ?
+
+                 (<MDBCard>
+                  <MDBCardHeader className="d-flex justify-content-between p-3">
+                   <p className="fw-bold mb-0">You</p>
+                   <p className="text-muted small mb-0">
+                    <MDBIcon far icon="clock" /> {currentTime}
+                   </p>
+                </MDBCardHeader>
+                <MDBCardBody>
+                  <p className="mb-0">
+                  {message.name}
+                  </p>
+                </MDBCardBody>
+              </MDBCard> ) : 
+              (<li class="d-flex justify-content-between mb-4">
               <MDBCard className="w-100">
                 <MDBCardHeader className="d-flex justify-content-between p-3">
-                  <p class="fw-bold mb-0">Lara Croft</p>
+                  <p class="fw-bold mb-0">{message.name}</p>
                   <p class="text-muted small mb-0">
-                    <MDBIcon far icon="clock" /> 13 mins ago
+                    <MDBIcon far icon="clock" /> {currentTime}
                   </p>
                 </MDBCardHeader>
                 <MDBCardBody>
                   <p className="mb-0">
-                    Sed ut perspiciatis unde omnis iste natus error sit
-                  </p>
+                  {message.text}
+                 </p>
                 </MDBCardBody>
               </MDBCard>
               <img
@@ -100,34 +146,25 @@ import {
                 className="rounded-circle d-flex align-self-start ms-3 shadow-1-strong"
                 width="60"
               />
-            </li>
-            <li className="d-flex justify-content-between mb-4">
-              <img
-                src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-6.webp"
-                alt="avatar"
-                className="rounded-circle d-flex align-self-start me-3 shadow-1-strong"
-                width="60"
-              />
-              <MDBCard>
-                <MDBCardHeader className="d-flex justify-content-between p-3">
-                  <p className="fw-bold mb-0">Brad Pitt</p>
-                  <p className="text-muted small mb-0">
-                    <MDBIcon far icon="clock" /> 10 mins ago
-                  </p>
-                </MDBCardHeader>
-                <MDBCardBody>
-                  <p className="mb-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  </p>
-                </MDBCardBody>
-              </MDBCard>
+            </li>)
+              )}
             </li>
             <li className="bg-white mb-3">
-              <MDBTextArea label="Message" id="textAreaExample" rows={4} />
-            </li>
-            <MDBBtn color="info" rounded className="float-end">
+            <form className="form" onSubmit={handleSendMessage}>
+        <MDBTextArea
+        label="Message" id="textAreaExample" rows={4}
+          type="text"
+          placeholder="Write message"
+          className="message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <MDBBtn color="info" rounded className="float-end" onClick={handleButtonClick}>
               Send
             </MDBBtn>
+      </form>
+            </li>
+
           </MDBTypography>
         </MDBCol>
       </MDBRow>

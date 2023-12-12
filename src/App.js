@@ -15,10 +15,10 @@ function App() {
     <div className="App">
 <BrowserRouter>
       <Routes>
-      <Route path='/' element={<Chatpage/>}/>
-      <Route path='chat' element={<Chatbox socket={socket}/>}/>
+      <Route path='/' element={<Post/>}/>
+      <Route path='/chat' element={<Chatpage socket={socket}/>}/>
+      <Route path='/chatsign' element={<Chatbox socket={socket}/>}/>
       <Route path='/PostListDetail' element={<PostListDetail/>}/>
-      <Route path="/chat" element={<Chatpage socket={socket} />}></Route>
       </Routes>
       </BrowserRouter>
     </div>
