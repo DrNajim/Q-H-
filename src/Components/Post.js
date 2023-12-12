@@ -4,6 +4,8 @@ import PostList from './PostList'
 import { useState } from 'react'
 import { getList } from '../Redux/Reducer/Postlists';
 import Chatbox from './Chatbox';
+import { Link } from 'react-router-dom';
+import { Button } from 'bootstrap';
 function Post(){
   const [selector, setItemList] = useState(['no data']);
   const dispatch= useDispatch();
@@ -21,8 +23,10 @@ function Post(){
   }, [dispatch]);
   return (
     <div>
-      <Chatbox/>
-<div style={{textAlign:"center", display: "flex", justifyContent:"space-evenly" }}>
+            <Link style={{ textDecoration: 'none', color: 'black' }} to="/chat">
+             <button style={{ backgroundColor:'pink', margin:'2em'}}>Click for Chat</button> 
+            </Link>
+            <div style={{textAlign:"center", display: "flex", justifyContent:"space-evenly" }}>
         <div className="search-videoflag"></div>
       </div>
       <div className="Universite_component">
