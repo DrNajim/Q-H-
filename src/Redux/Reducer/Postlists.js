@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 export const getList=createAsyncThunk("PostLists/getList", async ()=>{
     return axios.get("https://dummyjson.com/posts",)
-    .then(res=>{
+    .then(res=>{ 
         return res.data}) 
     .catch(err=>console.log(err))
 })  

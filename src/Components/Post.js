@@ -5,7 +5,6 @@ import { useState } from 'react'
 import { getList } from '../Redux/Reducer/Postlists';
 function Post(){
   const [selector, setItemList] = useState(['no data']);
-
   const dispatch= useDispatch();
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +25,7 @@ function Post(){
       </div>
       <div className="Universite_component">
         <div className="Universite_card">
-          {selector?.map((item) => (
+          {selector.posts?.map((item) => (
             <PostList key={item.id} {...item} />
           ))}
         </div>
