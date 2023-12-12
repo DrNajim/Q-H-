@@ -12,7 +12,7 @@ function PostListDetail(){
     const location=useLocation();
     const PostListDetail=location.state
     const dispatch = useDispatch()
-    const [setsign, setcurrentsign] = useState({})
+    const [setsign, setcurrentsign] = useState('')
   return (
     <div>
       <div>
@@ -26,12 +26,11 @@ function PostListDetail(){
           </MDBCardText>
           <input
         type="text"
-        value={PostListDetail.body}
         onChange={e =>
-          setcurrentsign({...PostListDetail, title:e.target.value})
+          setcurrentsign({...PostListDetail, body:e.target.value})
         }
         placeholder="Enter to update Email"
-      /><button onClick={dispatch(update(setsign))}>Update</button>
+      /><button onClick={() => dispatch(update(setsign))}>Update</button>
         </MDBCardBody>
       </MDBCard>
       </div></div>

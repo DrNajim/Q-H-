@@ -7,9 +7,9 @@ export const getList=createAsyncThunk("PostLists/getList", async ()=>{
         return res.data}) 
     .catch(err=>console.log(err))
 })  
-export const update=createAsyncThunk("PostLists/update", async (newtet, action)=>{
-    return axios.put(`https://dummyjson.com/posts/${newtet}`,)
-    .then(res=>{
+export const update=createAsyncThunk("PostLists/update", async (newtet)=>{
+    return axios.put(`https://dummyjson.com/posts/${newtet.id}`,{ body: newtet.body})
+    .then(res=>{console.log(res.data)
         return res.data}) 
     .catch(err=>console.log(err))
 })  
@@ -21,9 +21,6 @@ const PostlistsSlice = createSlice({
         erreur:"",
     },
     reducers:{
-        setstat(state,action){
-            return { ...state, name: action.payload };
-            },
     },
     extraReducers: (builder)=>
     builder.addCase(getList.fulfilled, (state, action)=>{

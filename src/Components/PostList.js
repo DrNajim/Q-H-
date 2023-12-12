@@ -2,7 +2,6 @@ import React from 'react'
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom';
 function PostList(props){ 
-  console.log(props.title)
    return (
     <div>
   <MDBTable style={{ marginTop: "2rem" }}>
