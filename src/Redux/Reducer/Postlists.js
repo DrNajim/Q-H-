@@ -8,7 +8,7 @@ export const getList=createAsyncThunk("PostLists/getList", async ()=>{
     .catch(err=>console.log(err))
 })  
 export const update=createAsyncThunk("PostLists/update", async (newtet, action)=>{
-    return axios.get(`https://dummyjson.com/posts/${newtet}`,)
+    return axios.put(`https://dummyjson.com/posts/${newtet}`,)
     .then(res=>{
         return res.data}) 
     .catch(err=>console.log(err))
