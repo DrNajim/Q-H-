@@ -19,6 +19,8 @@ function Post(){
 
     fetchData();
   }, [dispatch]);
+
+  
   return (
     <div>
             <Link style={{ textDecoration: 'none', color: 'black' }} to="/chat">
