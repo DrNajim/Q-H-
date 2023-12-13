@@ -37,6 +37,7 @@ import { useNavigate } from "react-router-dom";
           name: localStorage.getItem('userName'),
           id: `${socket.id}${Math.random()}`,
           socketID: socket.id,
+          time:`${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`,
         });
       }
       setMessage('');
@@ -46,18 +47,7 @@ import { useNavigate } from "react-router-dom";
   useEffect(() => {
     socket.on('messageResponse', (data) => setMessages([...messages, data]));
   }, [socket, messages]);
-  const [currentTime, setCurrentTime] = useState('');
 
-  const handleButtonClick = () => {
-    // Get the current time using the Date object
-    const now = new Date();
-    
-    // Format the time (adjust this part based on your formatting needs)
-    const formattedTime = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
-
-    // Update the state with the current time
-    setCurrentTime(formattedTime);
-  };
   const lastMessageRef = useRef(null);
   useEffect(() => {
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -117,7 +107,7 @@ import { useNavigate } from "react-router-dom";
                   <MDBCardHeader className="d-flex justify-content-between p-3">
                    <p className="fw-bold mb-0">You</p>
                    <p className="text-muted small mb-0">
-                    <MDBIcon far icon="clock" /> {currentTime}
+                    <MDBIcon far icon="clock" /> {message.time}
                    </p>
                 </MDBCardHeader>
                 <MDBCardBody>
@@ -131,7 +121,7 @@ import { useNavigate } from "react-router-dom";
                 <MDBCardHeader className="d-flex justify-content-between p-3">
                   <p class="fw-bold mb-0">{message.name}</p>
                   <p class="text-muted small mb-0">
-                    <MDBIcon far icon="clock" /> {currentTime}
+                    <MDBIcon far icon="clock" /> {message.time}
                   </p>
                 </MDBCardHeader>
                 <MDBCardBody>
@@ -152,14 +142,14 @@ import { useNavigate } from "react-router-dom";
             <li className="bg-white mb-3">
             <form className="form" onSubmit={handleSendMessage}>
         <MDBTextArea
-        label="Message" id="textAreaExample" rows={4}
+          label="Message" id="textAreaExample" rows={4}
           type="text"
           placeholder="Write message"
           className="message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <MDBBtn color="info" rounded className="float-end" onClick={handleButtonClick}>
+        <MDBBtn color="info" rounded className="float-end">
               Send
             </MDBBtn>
       </form>

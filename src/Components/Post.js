@@ -3,9 +3,7 @@ import { useDispatch } from 'react-redux'
 import PostList from './PostList'
 import { useState } from 'react'
 import { getList } from '../Redux/Reducer/Postlists';
-import Chatbox from './Chatbox';
 import { Link } from 'react-router-dom';
-import { Button } from 'bootstrap';
 function Post(){
   const [selector, setItemList] = useState(['no data']);
   const dispatch= useDispatch();
